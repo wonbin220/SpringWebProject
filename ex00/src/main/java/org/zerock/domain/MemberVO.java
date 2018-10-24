@@ -12,6 +12,11 @@ public class MemberVO {
 	private Date updatedate;
 	
 	
+	//MyBaits의 #문법 141p
+	// 밑에껄 작성하면 JUnit테스트할때 MemberVO가 안받아지니 생성자를 만들어줘야한다
+	
+	public MemberVO() {}
+	
 	//Constructor using Fields 로 만들어줌 -> MemberDAOTest에서 쓰기위해
 	public MemberVO(String userid, String userpw, String username, String email) {
 		super();
@@ -19,7 +24,11 @@ public class MemberVO {
 		this.userpw = userpw;
 		this.username = username;
 		this.email = email;
+		this.regdate = regdate;
+		this.updatedate = updatedate;
 	}
+	
+	
 	public String getUserid() {
 		return userid;
 	}

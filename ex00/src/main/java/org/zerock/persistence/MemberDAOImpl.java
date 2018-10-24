@@ -1,6 +1,7 @@
 package org.zerock.persistence;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +40,23 @@ public class MemberDAOImpl implements MemberDAO {
 //		return memberList;
 //	} 강사님이 알려주신 getMapper인데 이렇게쓰면 코드가 더길어지니 위에처럼 간단히 쓰는방법을 사용하는것이 좋음
 	
+	
+	@Override
+	public MemberVO readMember(String userid) throws Exception {
+		//return (MemberVO)	sqlSession.selectOne("member.selectMember", userid);
+		MemberVO vo = sqlSession.selectOne("member.selectMember", userid);
+		return vo;
+	}
+	
+	@Override
+	public MemberVO readWithPW(String userid, String userpw)throws Exception {
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+//  	Map<String, String> paramMap = new HashMap<String, String>(); , object자리에 String이나 int값이 올수잇다
+		
+		paramMap.put("userid", userid); //"userid" 소문자가 오는 이유는 memberMapper에 #{userid} 이값이 소문자이기때문.
+		paramMap.put("userpw", userpw); // 위와 마찬가지
+		
+		return sqlSession.selectOne("member.readWithPW", paramMap);
+	}
 
 }

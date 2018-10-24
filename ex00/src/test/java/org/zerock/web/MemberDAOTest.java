@@ -1,5 +1,6 @@
 package org.zerock.web;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,24 @@ public class MemberDAOTest {
 		System.out.println(dao.getTime());
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testInsertMember() throws Exception{
 		
-		MemberVO vo = new MemberVO("user00","user00","USER00","user00@aaa.com");
+		MemberVO vo = new MemberVO("user10","user10","USER10","user10@aaa.com");
 		
 		dao.insertMember(vo);
+	}
+	
+	// 책에 없는 내용, readMember, readWithPW 테스트
+	@Test
+	public void testReadMember() throws Exception {
+		MemberVO vo = dao.readMember("user10");
+		System.out.println(vo.toString());
+	}
+	
+	@Test
+	public void testReadWithPW() throws Exception {
+		MemberVO vo = dao.readWithPW("user10", "user10");
+		System.out.println(vo.toString());
 	}
 }
