@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd">
+ <configuration>
+ 
+ 	<!-- mybatis의 작동 규칙 정의 -->
+ 	<settings>
+ 		<setting name="cacheEnabled" value="false"/><!-- mybatis에서 기본적으로 제공하는 캐쉬를 사용하지 않겠다는 것. -->
+ 	</settings>
+ 	
+ 	<typeAliases>
+ 		<package name="com.springtest.domain"/>
+ 	</typeAliases>
+ 	
+ </configuration>
