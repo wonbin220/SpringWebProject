@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
-    pageEncoding="utf-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ page session="false" %>
@@ -17,7 +16,7 @@
 <c:forEach items="${list}" var="boardVO">
 	<tr>
 		<td>${boardVO.bno}</td>
-		<td><a href=''>${boardVO.title }</a>
+		<td><a href='/board/read?bno=${boardVO.bno }'>${boardVO.title }</a>
 		<td>${boardVO.writer }</td>
 		<td><fmt:formatDate pattern="yyyy-MM-dd HH:mm" value="${boardVO.regdate }" /></td>
 		<td><span class="badge bg-red">${boardVO.viewcnt }</span></td>
