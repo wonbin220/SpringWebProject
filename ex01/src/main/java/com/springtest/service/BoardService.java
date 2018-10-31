@@ -3,6 +3,7 @@ package com.springtest.service;
 import java.util.List;
 
 import com.springtest.domain.BoardVO;
+import com.springtest.domain.Criteria;
 
 public interface BoardService {
 	
@@ -15,4 +16,6 @@ public interface BoardService {
 	public void remove(Integer bno)throws Exception;
 	
 	public List<BoardVO> listAll() throws Exception;
+	
+	public List<BoardVO> listCriteria(Criteria cri)throws Exception;
 }

@@ -11,10 +11,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.springtest.domain.BoardVO;
+import com.springtest.domain.Criteria;
 import com.springtest.service.BoardService;
 
 @Controller
-@RequestMapping("board")
+@RequestMapping("/board/*")
 public class BoardController {
 	private static final Logger logger = LoggerFactory.getLogger(BoardController.class);
 	
@@ -103,5 +104,12 @@ public class BoardController {
 		rttr.addFlashAttribute("msg", "success");
 		
 		return "redirect:/board/listAll";
+	}
+	
+	@RequestMapping(value="/listCri", method= RequestMethod.GET)
+	public void lisAll(Criteria cri, Model model)throws Exception{
+		
+		logger.info("show list Page with Criteria............");
+		model.addAttribute("list", service.listCriteria(cri));
 	}
 }
