@@ -106,10 +106,19 @@ public class BoardController {
 		return "redirect:/board/listAll";
 	}
 	
+//	@RequestMapping(value="/listCri", method= RequestMethod.GET)
+//	public void lisAll(Criteria cri, Model model)throws Exception{
+//		
+//		logger.info("show list Page with Criteria............");
+//		model.addAttribute("list", service.listCriteria(cri));
+//	}
+	
+	// 직관적으로 알수있게 listCri가 어디에 속해있는지, board인지 다른곳인지  void보단 String으로 변경해주고 return값으로 알수있게
 	@RequestMapping(value="/listCri", method= RequestMethod.GET)
-	public void lisAll(Criteria cri, Model model)throws Exception{
+	public String lisAll(Criteria cri, Model model)throws Exception{
 		
 		logger.info("show list Page with Criteria............");
 		model.addAttribute("list", service.listCriteria(cri));
+		return "board/listCri";
 	}
 }
