@@ -12,6 +12,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.springtest.domain.BoardVO;
 import com.springtest.domain.Criteria;
+import com.springtest.domain.PageMaker;
 import com.springtest.service.BoardService;
 
 @Controller
@@ -121,4 +122,20 @@ public class BoardController {
 		model.addAttribute("list", service.listCriteria(cri));
 		return "board/listCri";
 	}
+	
+	@RequestMapping(value="/listPage", method=RequestMethod.GET)
+	public void listPage(Criteria cri, Model model)throws Exception{
+		logger.info(cri.toString());
+		
+		model.addAttribute("list", service.listCriteria(cri));
+		PageMaker pageMaker =  new PageMaker();
+		pageMaker.setCri(cri);
+		//pageMaker.setTotalCount(131);//임의 값
+		
+		pageMaker.setTotalCount(service.listCountCriteria(cri)); //totalcount
+		
+		model.addAttribute("pageMaker", pageMaker);
+	}
+	
+	
 }
