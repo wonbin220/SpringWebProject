@@ -1,0 +1,57 @@
+create table tbl_member(
+	
+	userid varchar(50) not null,
+ 
+   	userpw varchar(50) not null,
+  
+  	username varchar(50) not null,
+  
+  	email varchar(100),
+
+    	regdate timestamp default now(),
+
+    updatedate timestamp default now(),
+
+    primary key(userid)
+    );
+    
+ 
+    
+    
+
+create table tbl_board(
+
+    	bno INT NOT NULL auto_increment,
+
+    	title varchar(200) not null,
+
+    	content text null,
+
+    	writer varchar(50) not null,
+
+    	regdate timestamp not null default now(),
+
+    	viewcnt int default 0,
+    primary key (bno)
+    );
+
+
+   select * from tbl_board ;
+ 
+   
+insert into tbl_board (title, content, writer)
+(select title, content, writer from tbl_board);
+
+ -> 자기자신복사
+
+select count(*) from tbl_board;
+
+
+
+
+select * from tbl_board where bno > 0 order by bno desc limit 20,20;
+
+
+	
+update tbl_board set title = 'ddd', content = 'ddd'
+	where bno = 26;

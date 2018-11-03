@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -128,6 +129,7 @@ public class BoardController {
 		logger.info(cri.toString());
 		
 		model.addAttribute("list", service.listCriteria(cri));
+		logger.info("list="+ service.listCriteria(cri).toString());
 		PageMaker pageMaker =  new PageMaker();
 		pageMaker.setCri(cri);
 		//pageMaker.setTotalCount(131);//임의 값
@@ -137,5 +139,37 @@ public class BoardController {
 		model.addAttribute("pageMaker", pageMaker);
 	}
 	
+	@RequestMapping(value="/readPage", method= RequestMethod.GET)
+	public void read(@RequestParam("bno") int bno, @ModelAttribute("cri") Criteria cri, Model model) throws Exception{
+		model.addAttribute(service.read(bno));
+	}
+	
+	@RequestMapping(value="/removePage", method= RequestMethod.POST)
+	public String remove(@RequestParam("bno") int bno, Criteria cri, RedirectAttributes rttr) throws Exception {
+		
+		service.remove(bno);
+		rttr.addAttribute("page", cri.getPage());
+		rttr.addAttribute("perPageNum", cri.getPerPageNum());
+		rttr.addFlashAttribute("msg","success");
+		
+		return "redirect:/board/listPage";
+	}
+	
+	@RequestMapping(value="/modifyPage", method= RequestMethod.GET)
+	public void modifyPagningGET(@RequestParam("bno") int bno, @ModelAttribute("cri") Criteria cri, Model model) throws Exception{
+		
+		model.addAttribute(service.read(bno));
+	}
+	@RequestMapping(value="/modifyPage", method= RequestMethod.POST)
+	public String modifyPagningPOST(BoardVO board, Criteria cri, RedirectAttributes rttr) throws Exception{
+		
+		service.modify(board);
+		
+		rttr.addAttribute("page",  cri.getPage());
+		rttr.addAttribute("perPageNum",  cri.getPerPageNum());
+		rttr.addFlashAttribute("msg", "success");
+		
+		return "redirect:/board/listPage";
+	}
 	
 }
