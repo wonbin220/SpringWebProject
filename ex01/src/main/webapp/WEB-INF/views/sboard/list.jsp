@@ -17,7 +17,7 @@
 	<c:forEach items="${list}" var="boardVO">
 		<tr>
 			<td>${boardVO.bno}</td>
-			<td><a href="/board/readPage${pageMaker.makeQuery(pageMaker.cri.page)}&bno=${boardVO.bno}">${boardVO.title }</a></td>
+			<td><a href="/board/readPage${pageMaker.makeSearch(pageMaker.cri.page)}&bno=${boardVO.bno}">${boardVO.title }</a></td>
 			<td>${boardVO.writer}</td>
 			<td><fmt:formatDate pattern="yyyy-MM-dd HH:MM" value="${boardVO.regdate }" /></td>
 			<td><span class="badge bg-red">${boardVO.viewcnt }</span></td>
@@ -70,18 +70,37 @@
 		
 			<c:if test="${pageMaker.next && pageMaker.endPage > 0 }">
 				<li><a
-				href="listPage${pageMaker.makeQuery(pageMaker.endPage +1) }">&raquo;</a>
+				href="listPage${pageMaker.makeSearch(pageMaker.endPage +1) }">&raquo;</a>
 			</c:if>
 		</ul>
 	</div>
 
 <script>
 <script>
-var result = '${msg}';
-
-if (result == 'SUCCESS') {
-	alert("처리가 완료되었습니다.");
+	var result = '${msg}';
+	
+	if (result == 'SUCCESS') {
+		alert("처리가 완료되었습니다.");
 }
+
+
+	$(document).ready(
+		function() {
+			$('#searchBtn').on("click", function(event) {
+				
+				self.location = "list"
+					+ '${pageMaker.makeQuery(1)}'
+					+ "&searchType="
+					+ $("select option:selected").val()
+					+ "&Keyword=" + encodeURIComponent($('#keywordInput').val());
+			});
+	
+		
+		$('#newBtn').on("click", function(event) {
+			
+			self.location = "register";
+		});
+	});
 </script>
 
 <%@ include file="../include/footer.jsp" %>   

@@ -17,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.springtest.domain.BoardVO;
 import com.springtest.domain.Criteria;
+import com.springtest.domain.SearchCriteria;
 import com.springtest.persistence.BoardDAO;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -85,7 +86,7 @@ public class BoardDAOTest {
 		}
 	}
 	
-	@Test
+	@Test @Ignore
 	public void testURI()throws Exception{
 		
 		UriComponents uirComponents = UriComponentsBuilder.newInstance()
@@ -103,5 +104,27 @@ public class BoardDAOTest {
 //				.build()
 		logger.info("/board/read?bno=12&perPageNum=20");
 		logger.info(uirComponents.toString());
+	}
+	
+	@Test 
+	public void testDynamic1() throws Exception{
+		
+		SearchCriteria cri = new SearchCriteria();
+		cri.setPage(1);
+		cri.setKeyword("글");
+		cri.setSearchType("t");
+		
+		logger.info("==============================");
+		
+		List<BoardVO> list = dao.listSearch(cri);
+		
+		for (BoardVO boardVO : list) {
+			logger.info(boardVO.getBno() + ":" +  boardVO.getTitle());
+			
+			logger.info("============================================");
+			
+			logger.info("COUNT: " + dao.listSearchCount(cri));
+		}
+		
 	}
 }

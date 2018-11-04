@@ -68,6 +68,24 @@
 	  from tbl_board
 	 where bno &gt; 0
 	</select>
+	
+	<!-- 검색과 페이징처리 -->
+	<select id="listSearch" resultType="BoardVO">
+	select *
+	 from
+		   tbl_board
+	 where bno &gt; 0
+  order by bno desc, regdate desc
+	 limit #{pageStart}, #{perPageNum}
+	</select>
+	
+	<!-- 검색과 페이징처리 -->
+	<select id="listSearchCount" resultType="BoardVO">
+	select count(bno)
+	  from tbl_board
+	 where bno &gt; 0
+	</select>
+	
  </mapper>
   
   	

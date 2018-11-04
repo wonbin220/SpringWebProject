@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.springtest.domain.BoardVO;
 import com.springtest.domain.Criteria;
+import com.springtest.domain.SearchCriteria;
 
 public interface BoardDAO {
 
@@ -15,4 +16,7 @@ public interface BoardDAO {
 	public List<BoardVO> listPage(int page)throws Exception;
 	public List<BoardVO> listCriteria(Criteria cri) throws Exception;
 	public int countPaging(Criteria cri)throws Exception; //totalCount 반환
+	public List<BoardVO> listSearch(SearchCriteria cri)throws Exception; //검색과 페이징처리
+	public int listSearchCount(SearchCriteria cri)throws Exception; //검색과 페이징처리
+	
 }
