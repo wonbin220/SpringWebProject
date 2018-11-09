@@ -36,4 +36,20 @@
           WHERE RNO = #{rno}
     </delete>
 
+    <!--paging-->
+    <select id="listPage" resultType="ReplyVO"> 
+	SELECT * 	
+      FROM TBL_BOARD
+	 WHERE BNO = #{bno}
+  ORDER BY RNO DESC
+	 LIMIT #{cri.pageStart}, #{cri.perPageNum}	
+	</select>
+
+	<select id="count" resultType="int">
+	SELECT COUNT(BNO)
+	  FROM TBL_REPLY
+	 WHERE BNO = #{bno}
+	 </select>
+
+   
 </mapper>
