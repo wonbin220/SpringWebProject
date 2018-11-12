@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.springtest.domain.BoardVO;
 import com.springtest.domain.Criteria;
@@ -21,9 +23,12 @@ public class BoardServiceImpl implements BoardService {
 		dao.create(borad);
 		
 	}
-
-	@Override
+	
+	@Transactional(isolation=Isolation.READ_COMMITTED)//트랜잭션 격리 , 대부분의 데이터베이스가 
+	@Override									// 기본으로 사용하는 수준으로 다른 연결이 커밋하지 않은 데이터는 보지 못함
 	public BoardVO read(Integer bno) throws Exception {
+	
+		dao.updateViewCnt(bno);
 		return dao.read(bno);
 	}
 

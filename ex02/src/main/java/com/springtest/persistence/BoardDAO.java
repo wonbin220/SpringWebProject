@@ -18,5 +18,6 @@ public interface BoardDAO {
 	public int countPaging(Criteria cri)throws Exception; //totalCount 반환
 	public List<BoardVO> listSearch(SearchCriteria cri)throws Exception; //검색과 페이징처리
 	public int listSearchCount(SearchCriteria cri)throws Exception; //검색과 페이징처리
-	
+	public void updateReplyCnt(Integer bno, int amount) throws Exception; // 댓글의 숫자 를 변경
+	public void updateViewCnt(Integer bno) throws Exception;//조회수를 1씩 증가
 }
