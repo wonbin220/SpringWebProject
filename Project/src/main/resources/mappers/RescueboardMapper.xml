@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+	
+<mapper namespace="rescueboard">
+	
+	<resultMap type="RescueBoardVO" id="rescueboardResultMap">
+		<result property="rescue_num" column="rescue_num" />
+		<result property="member_nickname" column="member_nickname" />
+		<result property="rescue_subject" column="rescue_subject" />
+		<result property="rescue_content" column="rescue_content" />
+		<result property="rescue_readcount" column="rescue_readcount" />
+		<result property="rescue_ref" column="rescue_ref" />
+		<result property="rescue_ref_seq" column="rescue_ref_seq" />
+		<result property="rescue_ref_level" column="rescue_ref_level" />
+		<result property="rescue_date" column="rescue_date" />
+	</resultMap>
+	
+	<resultMap type="MemberVO" id="memberResultMap">
+		<result property="member_picture" column="member_picture" />
+	</resultMap>
+	
+	<resultMap type="java.util.HashMap" id="commentMap">
+		<result property="rescue_num" column="rescue_num" />
+		<result property="member_nickname" column="member_nickname" />
+		<result property="rescue_subject" column="rescue_subject" />
+		<result property="rescue_content" column="rescue_content" />
+		<result property="rescue_readcount" column="rescue_readcount" />
+		<result property="rescue_ref" column="rescue_ref" />
+		<result property="rescue_ref_seq" column="rescue_ref_seq" />
+		<result property="rescue_ref_level" column="rescue_ref_level" />
+		<result property="rescue_date" column="rescue_date" />
+		<result property="member_picture" column="member_picture" />
+	</resultMap>
+	
+	<!-- id는 MemberMapper.java에 동일하게 사용해야 한다 -->
+	<!-- 원글만 불러오기 -->
+	<select id="getMainBoardList" parameterType="hashmap" resultMap="rescueboardResultMap" >
+		select * from (select rownum rnum, rescue_num, member_nickname,
+		rescue_subject, rescue_content, rescue_readcount, rescue_ref, rescue_ref_seq,
+		rescue_ref_level, rescue_date from (select * from rescue_board where rescue_ref_level = 0
+		<if test = "topic.equals('title')" >
+		and rescue_subject like '%'||#{keyword}||'%' 
+		</if>
+		<if test = "topic.equals('content')" >
+		and rescue_content like '%'||#{keyword}||'%' 
+		</if>
+		<if test = "topic.equals('writer')" >
+		and member_nickname like '%'||#{keyword}||'%' 
+		</if> 
+		order by rescue_num desc))
+		 where rnum&gt;=#{startrow} and rnum&lt;=#{endrow}
+	</select>
+	
+	<!-- 원글만 카운트하기 -->
+	<select id="getCountMainBoard" parameterType="hashmap" resultType="int" >
+		select count(*) from rescue_board where rescue_ref_level = 0
+		<if test = "topic.equals('title')" >
+		and rescue_subject like '%'||#{keyword}||'%' 
+		</if>
+		<if test = "topic.equals('content')" >
+		and rescue_content like '%'||#{keyword}||'%' 
+		</if>
+		<if test = "topic.equals('writer')" >
+		and member_nickname like '%'||#{keyword}||'%' 
+		</if>
+	</select>
+	
+	<!-- 해당글의 댓글들 불러오기 -->
+	<select id="getReplyBoardList" parameterType="int" resultMap="commentMap" >
+		select f.rescue_num, m.member_nickname, f.rescue_subject, f.rescue_content, f.rescue_readcount, f.rescue_ref, 
+		f.rescue_ref_seq, f.rescue_ref_level, f.rescue_date, m.member_picture from rescue_board f, member m
+		where f.MEMBER_NICKNAME = m.MEMBER_NICKNAME and f.rescue_ref = #{rescue_num} and
+		f.rescue_ref_level not in(0) order by f.rescue_ref_seq asc
+	</select>
+	
+	<select id="getCountReplyBoard" parameterType="int" resultType="int" >
+		select count(*) from rescue_board where rescue_ref_level not in(0) and rescue_ref =#{rescue_num} 
+	</select>
+	
+	<select id="getBoard" parameterType="int" resultMap="rescueboardResultMap" >
+		select * from rescue_board where rescue_num =#{rescue_num} 
+	</select>
+	
+	<select id="getMaxNumBoard" resultType="int" >
+		select nvl(max(rescue_num), 0) from rescue_board
+	</select>
+	
+	<insert	id="insertBoard" parameterType="rescueBoardVO" >
+		insert into rescue_board(rescue_num, member_nickname,
+		<if test = "rescue_subject != null ">
+		  rescue_subject,
+		</if>
+		  rescue_content, rescue_readcount, rescue_ref, rescue_ref_seq, rescue_ref_level, rescue_date) values(#{rescue_num}, #{member_nickname}, 
+		<if test = "rescue_subject != null ">
+		  #{rescue_subject},
+		</if>
+		  #{rescue_content}, 0, #{rescue_ref}, #{rescue_ref_seq}, #{rescue_ref_level}, sysdate)
+	</insert>
+	
+	<update id="insertReply" parameterType="hashmap" >
+		update rescue_board set rescue_ref_seq=rescue_ref_seq +1 where rescue_ref=#{rescue_ref} and rescue_ref_seq &gt;#{rescue_ref_seq}
+	</update>
+	
+	<update id="updateBoard" parameterType="rescueBoardVO" >
+		update rescue_board set rescue_subject=#{rescue_subject}, rescue_content=#{rescue_content} where rescue_num=#{rescue_num}
+	</update>
+	
+	<delete id="deleteArticle" parameterType="rescueBoardVO" >
+		delete from rescue_board where rescue_ref=#{rescue_num} 
+	</delete>
+	
+	<delete id="deleteComment" parameterType="rescueBoardVO" >
+		delete from rescue_board where rescue_num=#{rescue_num} 
+	</delete>
+	
+	<update id="upReadCountBoard" parameterType="int" > <!-- parameterType="int" 동작함 -->
+		update rescue_board set rescue_readcount= rescue_readcount+1 where rescue_num=#{rescue_num}
+	</update>
+	
+	<update id="updateComment" parameterType="rescueBoardVO" >
+		update rescue_board set rescue_content=#{rescue_content} where rescue_num=#{rescue_num}
+	</update>
+	
+</mapper>
