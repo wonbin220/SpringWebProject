@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+	
+<mapper namespace="com.spring.altaltal.cpanimal.cpanimalMapper">
+	
+	<resultMap type="CpanimalVO" id="cpanimalResultMap">
+		<result property="cpanimal_num" column="cpanimal_num" />
+		<result property="cpanimal_name" column="cpanimal_name" />
+		<result property="cpanimal_area" column="cpanimal_area" />
+		<result property="cpanimal_make" column="cpanimal_make" />
+		<result property="cpanimal_make_url" column="cpanimal_make_url" />
+		<result property="cpanimal_content" column="cpanimal_content" />
+		<result property="cpanimal_ingre" column="cpanimal_ingre" />
+		<result property="cpanimal_degree" column="cpanimal_degree" />
+		<result property="cpanimal_likecount" column="cpanimal_likecount" />
+		<result property="cpanimal_readcount" column="cpanimal_readcount" />
+		<result property="cpanimal_picture" column="cpanimal_picture" />
+	</resultMap>
+	
+	<resultMap type="java.util.HashMap" id="commentMap">
+		<result property="cpboard_num" column="cpboard_num" />
+		<result property="cpanimal_num" column="cpanimal_num" />
+		<result property="member_nickname" column="member_nickname" />
+		<result property="member_picture" column="member_picture" />
+		<result property="cpboard_content" column="cpboard_content" />
+		<result property="cpboard_sweat" column="cpboard_sweat" />
+		<result property="cpboard_sour" column="cpboard_sour" />
+		<result property="cpboard_body" column="cpboard_body" />
+		<result property="cpboard_spark" column="cpboard_spark" />
+		<result property="cpboard_popular" column="cpboard_popular" />
+		<result property="cpboard_date" column="cpboard_date" />
+	</resultMap>
+
+	<select id="getCpanimalList" parameterType="hashmap" resultType="CpanimalVO" >
+		select * from (select rownum rnum, cpanimal_num, cpanimal_name, cpanimal_area,
+		cpanimal_make, cpanimal_make_url, cpanimal_content, cpanimal_ingre, cpanimal_degree,
+		 cpanimal_likecount, cpanimal_readcount, cpanimal_picture from (select * from cpanimal where cpanimal_area = #{cpanimal_area}	
+		<if test = "keyword.equals('like')" >
+		 order by cpanimal_likecount desc
+		</if>
+		<if test = "keyword.equals('read')" >
+		order by cpanimal_readcount desc
+		</if>
+		<if test = "keyword.equals('abc')" >
+		order by cpanimal_name
+		</if>
+		 ))where rnum&gt;=#{startrow} and rnum&lt;=#{endrow}
+		
+	</select>
+	
+	<select id="getCountCpanimal" parameterType="String" resultType="int" >
+		select count(*) from cpanimal where cpanimal_area = #{cpanimal_area}	
+	</select>
+	
+	<update id="upCountCpanimal" parameterType="int" >
+		update cpanimal set cpanimal_readcount = cpanimal_readcount +1 where cpanimal_num = #{cpanimal_num}	 
+	</update>
+	
+	<select id="getCpanimal" parameterType="int" resultType="com.spring.altaltal.cpanimal.cpanimalVO" >
+		select * from cpanimal where cpanimal_num = #{cpanimal_num}	
+	</select>
+	
+	<select id="getCommentList" parameterType="hashmap" resultMap="commentMap" >
+		select * from (select rownum rnum, cpboard_num, cpanimal_num, member_nickname, member_picture, 
+		cpboard_content, cpboard_sweat, cpboard_sour, cpboard_body, cpboard_spark, cpboard_popular, cpboard_date  
+		from (select b.cpboard_num, b.cpanimal_num, b.member_nickname, m.member_picture, b.cpboard_content,
+		 b.cpboard_sweat, b.cpboard_sour, b.cpboard_body, b.cpboard_spark, b.cpboard_popular, b.cpboard_date 
+		 from cpanimal_board b, member m where b.member_nickname = m.member_nickname 
+		 and cpanimal_num = #{cpanimal_num} order by cpboard_num desc)) where rnum&gt;=#{startrow} and rnum&lt;=#{endrow}
+	</select>
+	
+	<select id="getCountComment" parameterType="int" resultType="int" >
+		select count(*) from cpanimal_board where cpanimal_num = #{cpanimal_num}
+	</select>
+	
+	<select id="getCountMaxComment" resultType="int" >
+		select nvl(max(cpboard_num), 0) from cpanimal_board
+	</select>
+	
+	<insert id="insertCpanimalComment" parameterType="CpanimalboardVO" >
+		insert into cpanimal_board values(#{cpboard_num}, #{cpanimal_num}, #{member_nickname}, #{cpboard_content},
+		 #{cpboard_sweat}, #{cpboard_sour}, #{cpboard_body}, #{cpboard_spark}, #{cpboard_popular}, sysdate)
+	</insert>
+	
+	<select id="getUserLikes" parameterType="String" resultType="String" >
+		select nvl(member_cpanimal, 'not') from member where member_email = #{member_email}
+	</select>
+	
+	<update id="updateUserLike" parameterType="hashmap" >
+		update member set member_cpanimal = #{member_cpanimal} where member_email =#{member_email}
+	</update>
+	
+	<update id="upLikeCount" parameterType="int" >
+		update cpanimal set cpanimal_likecount = cpanimal_likecount+1 where cpanimal_num =#{cpanimal_num}
+	</update>
+	
+	<update id="downLikeCount" parameterType="int" >
+		update cpanimal set cpanimal_likecount = cpanimal_likecount-1 where cpanimal_num =#{cpanimal_num}
+	</update>
+	
+	<select id="getCpanimalLike" parameterType="int" resultType="int" >
+		select cpanimal_likecount from cpanimal where cpanimal_num =#{cpanimal_num}
+	</select>
+	
+	<update id="updateCpanimalComment" parameterType=".CpanimalboardVO" >
+		update cpanimal_board set cpboard_content = #{cpboard_content}, cpboard_sweat = #{cpboard_sweat},
+		 cpboard_sour = #{cpboard_sour}, cpboard_body = #{cpboard_body}, cpboard_spark = #{cpboard_spark}, cpboard_popular = #{cpboard_popular}
+		 where cpboard_num = #{cpboard_num}
+	</update>
+	
+	<delete id="deleteCpanimalComment" parameterType="CpanimalboardVO" >
+		delete from cpanimal_board where cpboard_num = #{cpboard_num} 
+	</delete>
+	
+</mapper>

@@ -2,15 +2,18 @@ package companionanimal;
 
 import java.sql.Date;
 
-public class CpanimalVO {
+import org.springframework.stereotype.Component;
 
-	private int cpboard_num; // 게시판번호
-	private int cpanimal_num; // 동물 번호
-	private String member_nickname;
-	private String cpboard_content;
+@Component
+public class CpanimalboardVO {
+	
+	private int cpboard_num;  // 게시판번호
+	private int cpanimal_num; // 동물번호
+	private String cpboard;
+	private String mboard_content;
 	private int cpboard_sweat;
 	private int cpboard_sour;
-	private int cpboard_body;
+	private int mboard_body;
 	private int cpboard_spark;
 	private int cpboard_popular;
 	private Date cpboard_date;
@@ -27,17 +30,17 @@ public class CpanimalVO {
 	public void setCpanimal_num(int cpanimal_num) {
 		this.cpanimal_num = cpanimal_num;
 	}
-	public String getMember_nickname() {
-		return member_nickname;
+	public String getCpboard() {
+		return cpboard;
 	}
-	public void setMember_nickname(String member_nickname) {
-		this.member_nickname = member_nickname;
+	public void setCpboard(String cpboard) {
+		this.cpboard = cpboard;
 	}
-	public String getCpboard_content() {
-		return cpboard_content;
+	public String getMboard_content() {
+		return mboard_content;
 	}
-	public void setCpboard_content(String cpboard_content) {
-		this.cpboard_content = cpboard_content;
+	public void setMboard_content(String mboard_content) {
+		this.mboard_content = mboard_content;
 	}
 	public int getCpboard_sweat() {
 		return cpboard_sweat;
@@ -51,11 +54,11 @@ public class CpanimalVO {
 	public void setCpboard_sour(int cpboard_sour) {
 		this.cpboard_sour = cpboard_sour;
 	}
-	public int getCpboard_body() {
-		return cpboard_body;
+	public int getMboard_body() {
+		return mboard_body;
 	}
-	public void setCpboard_body(int cpboard_body) {
-		this.cpboard_body = cpboard_body;
+	public void setMboard_body(int mboard_body) {
+		this.mboard_body = mboard_body;
 	}
 	public int getCpboard_spark() {
 		return cpboard_spark;
@@ -77,11 +80,11 @@ public class CpanimalVO {
 	}
 	@Override
 	public String toString() {
-		return "CpanimalVO [cpboard_num=" + cpboard_num + ", cpanimal_num=" + cpanimal_num + ", member_nickname="
-				+ member_nickname + ", cpboard_content=" + cpboard_content + ", cpboard_sweat=" + cpboard_sweat
-				+ ", cpboard_sour=" + cpboard_sour + ", cpboard_body=" + cpboard_body + ", cpboard_spark="
-				+ cpboard_spark + ", cpboard_popular=" + cpboard_popular + ", cpboard_date=" + cpboard_date + "]";
+		return "MakguliboardVO [cpboard_num=" + cpboard_num + ", cpanimal_num=" + cpanimal_num + ", cpboard=" + cpboard
+				+ ", mboard_content=" + mboard_content + ", cpboard_sweat=" + cpboard_sweat + ", cpboard_sour="
+				+ cpboard_sour + ", mboard_body=" + mboard_body + ", cpboard_spark=" + cpboard_spark
+				+ ", cpboard_popular=" + cpboard_popular + ", cpboard_date=" + cpboard_date + "]";
 	}
 	
-	
+ 
 }

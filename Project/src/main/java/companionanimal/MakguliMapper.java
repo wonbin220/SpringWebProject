@@ -11,13 +11,13 @@ public interface MakguliMapper {
 	int upCountMakguli(int makguli_num);
 	ArrayList<HashMap<String, Object>> getCommentList(HashMap<String, Integer> map);
 	int getCountComment(int makguli_num);
-	int insertMakguliComment(MakguliboardVO vo);
+	int insertMakguliComment(CpanimalboardVO vo);
 	int getCountMaxComment();
 	String getUserLikes(String member_email);
 	int updateUserLike(HashMap<String, String> map);
 	int upLikeCount(int makguli_num);
 	int downLikeCount(int makguli_num);
 	int getMaguliLike(int makguli_num);
-	int updateMakguliComment(MakguliboardVO vo);
-	int deleteMakguliComment(MakguliboardVO vo);
+	int updateMakguliComment(CpanimalboardVO vo);
+	int deleteMakguliComment(CpanimalboardVO vo);
 }

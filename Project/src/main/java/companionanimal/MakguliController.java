@@ -135,7 +135,7 @@ public class MakguliController {
 	}*/
 	
 	@RequestMapping(value="/insertMakguliComment.ma")
-	public String insertMakguliComment(MakguliboardVO vo, HttpSession session, HttpServletResponse response)throws Exception {
+	public String insertMakguliComment(CpanimalboardVO vo, HttpSession session, HttpServletResponse response)throws Exception {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		System.out.println("insertmagkulicomment : "+ vo.getMboard_body());
@@ -193,7 +193,7 @@ public class MakguliController {
 	}
 	
 	@RequestMapping(value="/updateMakguliComment.ma")
-	public String updateMakguliComment(MakguliboardVO vo, HttpServletRequest request, HttpServletResponse response)throws Exception {
+	public String updateMakguliComment(CpanimalboardVO vo, HttpServletRequest request, HttpServletResponse response)throws Exception {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		int page = Integer.parseInt(request.getParameter("page"));
@@ -215,7 +215,7 @@ public class MakguliController {
 	}
 	
 	@RequestMapping(value="/deleteMakguliComment.ma")
-	public String deleteMakguliComment(MakguliboardVO vo, HttpServletRequest request, HttpServletResponse response)throws Exception {
+	public String deleteMakguliComment(CpanimalboardVO vo, HttpServletRequest request, HttpServletResponse response)throws Exception {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		int page = Integer.parseInt(request.getParameter("page"));
