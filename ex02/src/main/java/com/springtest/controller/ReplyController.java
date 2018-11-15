@@ -81,7 +81,7 @@ public class ReplyController {
 		return entity;
 	}
 					 //   /게시물번호/페이지번호
-	@RequestMapping(value="{bno}/{page}", method = RequestMethod.GET)
+	@RequestMapping(value="/{bno}/{page}", method = RequestMethod.GET)
 	public ResponseEntity<Map<String, Object>> listPage(@PathVariable("bno") Integer bno, @PathVariable("page") Integer page){
 	//					Ajax로 호출될 것이므로 Model객체를 사용하지 못하니 데이터를 담기위해 Map타입 객체를 별도로 생성
 		ResponseEntity<Map<String, Object>> entity = null;

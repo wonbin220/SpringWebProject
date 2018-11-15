@@ -39,7 +39,7 @@
     <!--paging-->
     <select id="listPage" resultType="ReplyVO"> 
 	SELECT * 	
-      FROM TBL_BOARD
+      FROM TBL_REPLY
 	 WHERE BNO = #{bno}
   ORDER BY RNO DESC
 	 LIMIT #{cri.pageStart}, #{cri.perPageNum}	

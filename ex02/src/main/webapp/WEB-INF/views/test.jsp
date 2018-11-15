@@ -60,10 +60,10 @@
 
 	<div>
 		<div>
-			REPLYER <input type='text' name='replyer' id='newReplyWriter'>
+			REPLYER <input type="text" name="replyer" id="newReplyWriter">
 		</div>
 		<div>
-			REPLY TEXT <input type='text' name='replytext' id='newReplyText'>
+			REPLY TEXT <input type="text" name="replytext" id="newReplyText">
 		</div>
 		<button id="replyAddBtn">ADD REPLY</button>
 	</div>
@@ -73,7 +73,7 @@
 	<ul id="replies">
 	</ul>
 	
-	<ul class='pagination'>
+	<ul class="pagination">
 	</ul>	
 
 
@@ -82,10 +82,10 @@
 
 	<script>
 	
-		var bno = 123239;
+		var bno = 2;
 		
 		getPageList(1);
-
+		
 		function getAllList() {
 
 			$.getJSON("/replies/all/" + bno, function(data) {
@@ -94,13 +94,15 @@
 				$(data).each(
 					function() {
 					str += "<li data-rno='"+this.rno+"' class='replyLi'>"
-					+ this.rno + ":" + this.replytext + "<button>MOD</button></li>";
+					+ this.rno + "<span>:" + this.replytext + "</span>" + "<button>MOD</button></li>";
 					});
 				$("#replies").html(str);
 				});
 		}
-		$("#replyAddBtn").on("click", function() {
-
+		
+		getAllList();
+		$("#replyAddBtn").click( function() {
+		
 			var replyer = $("#newReplyWriter").val();
 			var replytext = $("#newReplyText").val();
 
