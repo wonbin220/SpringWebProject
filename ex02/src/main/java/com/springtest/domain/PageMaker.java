@@ -29,11 +29,12 @@ public class PageMaker {
 		
 		calcData();
 	}
+	
 	private void calcData() {
 		
 		endPage = (int)(Math.ceil(cri.getPage() / (double)displayPageNum) * displayPageNum);
 		startPage = (endPage - displayPageNum) + 1;
-		int tempEndPage = (int)(Math.ceil(totalCount) / (double)cri.getPerPageNum());
+		int tempEndPage = (int)(Math.ceil(totalCount / (double)cri.getPerPageNum()));
 		
 		if(endPage > tempEndPage) {
 			endPage = tempEndPage;
@@ -43,27 +44,7 @@ public class PageMaker {
 		
 		next = endPage * cri.getPerPageNum() >= totalCount ? false : true;
 	}
-	
-//  private void calcData() {  책 제공소스코드
-//		
-//		endPage = (int) (Math.ceil(cri.getPage() / (double)displayPageNum ) * displayPageNum);
-//		
-//		startPage = (endPage - displayPageNum) + 1;
-//		
-//		int tempEndPage = (int)(Math.ceil(totalCount / (double)cri.getPerPageNum()));
-//		
-//		if(endPage > tempEndPage){
-//			endPage = tempEndPage;
-//		}
-//		
-//		prev = startPage ==1 ? false : true;
-//		
-//		next = endPage * cri.getPerPageNum() >= totalCount ? false : true;
-//		
-//	}
-//	
-	
-	
+
 
 	public int getStartPage() {
 		return startPage;
