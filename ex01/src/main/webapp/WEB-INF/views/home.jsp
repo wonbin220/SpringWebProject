@@ -13,6 +13,13 @@
 			<div class="box">
 				<div class="box-header with-border">
 					<h3 class="box-title">HOME PAGE</h3>
+					<div>
+						<label>등록</label><br/>
+						<a href="http://localhost:8085/board/register">http://localhost:8085/board/register</a>
+						<br/>
+					</div>
+					
+			
 				</div>
 			</div>
 		</div><!-- /.col (left) -->

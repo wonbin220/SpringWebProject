@@ -73,9 +73,7 @@
 				</div>
 			</div>
 		
-		</div>
-	</div>
-
+	
 		<!-- The time line -->
 		<ul class="timeline">
 		  <!-- timeline time label -->
@@ -89,26 +87,109 @@
 		<div class="text-center">
 			<ul id='pagination' class="pagination pagination-sm no-margin"></ul>
 		</div>
+	
+		</div>
+		<!-- /.col -->
+</div>
+<!-- /.row -->
 </section>
 <!-- /.content -->
 
+<script id="template" type="text/x-handlebars-template">
+{{#each .}}
+<li class="replyLi data-rno={{rno}}>
+<i class="fa fa-comments bg-blue"></i>
+	<div class="timeline-item">
+		<span class="time">
+			<i class="fa fa-clock-o"></i>{{prettifyDate regdate}}
+		</span>
+	<h3 class="timeline-header"><strong>{{rno}}</strong> -{{replyer}}</h3>
+	<div class="timeline-body">{{replytext}} </div>
+		<div class="timeline-footer">
+		 <a class="btn btn-primary btx-xs" data-toggle="modal" data-target="#modifyModal">Modify</a>
+		</div>
+	<div>
+</li>
+{{/each}}
+</script>
 
-<!-- fomObj => 위에 선언된 form태그 -->
 <script>
 
-function getPage(pageInfo){
+Handlebars.registerHelper("prettifyDate", function(timevalue){
+	var dateObj = new Date(timeValue);
+	var year = dataObj.getFullYear();
+	var month = dataObj.getMonth() + 1;
+	var date = dateObj.getDate();
+	return year+"/"+month+"/"+date;
+});
+
+var printData = function (replyArr, target, templateObject){
 	
+	var template = Handlebars.complie(templateObject.html());
+	
+	var html = template(replyArr);
+	$(".replyLi").remove();
+	target.after(html);
+	}
+	
+var bno = ${boardVO.bno}; // jsp에 처리되는 문자열로 해당 게시물의 번호
+var replypage = 1; // 수정, 삭제 작업 이후 사용자가 보던 댓글의 페이지 번호를 가지고 다시 목록을 출력하기 위해 유지되는 데이터
+
+
+function getPage(pageInfo){ // getPage() 특정한 게시물에 대한 페이징 처리를 위해 호출되는 함수
+							// jQuery를 이용해 JSON타입의 데이터를 처리
 	$.getJSON(pageInfo,function(data){
 		printData(data.list, $("#repliesDiv") ,$('#template'));
 		printPaging(data.pageMaker, $(".pagination"));
 		
 		$("#modifyModal").modal('hide');
-		$("#replycntSmall").html("[ " + data.pageMaker.totalCount +" ]");
 		
 	});
 }
 
+var printPaging = function(pageMaker, target){
+	var str="";
+	
+	if(pageMaker.prev){
+		str += "<li><a href='"+(pageMaker.startPage-1)"'> << </a></li>";
+		
+	}
+	
+	for (var i=pageMaker.startPage, len = pageMaker.endPage; i <= len; i++){
+		var startClass = pageMaker.cri.page == i?'class=active':'';
+		str += "<li "+strClass+"><a href='"+i"'>"+i+"</a></li>";
+	}
+	
+	if(pageMaker.next){
+		str += "<li><a href='"+(pageMaker.endPage+1)"'> >> </a></li>";
 
+	}
+	target.html(str);
+};
+
+$("#repliesDiv").click(function () { 
+	if($(".timeline li").size() > 1){ //.size() 목록을 가져오는 버튼이 보여지는 <li>만 있는 경우 1페이지의 댓글목록을 가져오기위해 처리한 코드
+		return;
+	}
+	getPgae("/replies/" + bno + "/1");
+});
+
+$(".pagination").click("li a", function(event){
+	
+	event.preventDefault();
+	
+	replyPage = $(this).attr("href");
+	
+	getPage("/replies/" + bno + "/" + replyPage);
+	
+}); // 댓글 페이징 의 이벤트 처리, ul class="pagination"에서 이루어짐. 
+
+</script>
+
+<script>
+
+
+<!-- fomObj => 위에 선언된 form태그 -->
 $(document).ready(function(){
 	
 	var formObj = $("form[role='form']");
@@ -133,4 +214,6 @@ $(document).ready(function(){
 	});
 });
 </script>
+
+
 <%@ include file="../include/footer.jsp" %>

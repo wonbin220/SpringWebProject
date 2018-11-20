@@ -54,7 +54,7 @@
 		 , WRITER
 		 , REGDATE
 		 , VIEWCNT
-		 , REPLYCNT
+		
 	 FROM
 		   TBL_BOARD
 	 WHERE BNO &gt; 0
