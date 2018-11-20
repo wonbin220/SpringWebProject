@@ -69,22 +69,57 @@
 	 where bno &gt; 0
 	</select>
 	
+		
+	<!-- 동일한 SQL 구문 재사용 = include -->
+	<sql id="search">
+	 <if test="searchType != null">
+	 	<if test="searchType == 't'.toString()">
+	 	 and title like CONCAT('%', #{keyword}, '%')
+	 	</if>
+	 	<if test="searchType == 'c'.toString()">
+	 	 and content like CONCAT('%', #{keyword}, '%')
+	 	</if>
+	 	<if test="searchType == 'w'.toString()">
+	 	 and writer like CONCAT('%', #{keyword}, '%')
+	 	</if>
+	 	<if test="searchType == 'tc'.toString()">
+	 	 and ( title like CONCAT('%', #{keyword}, '%') OR content like CONCAT('%', #{keyword}, '%'))
+	 	</if>
+	 	<if test="searchType == 'cw'.toString()">
+	 	 and ( content like CONCAT('%', #{keyword}, '%') OR writer like CONCAT('%', #{keyword}, '%'))
+	 	</if>
+	 	<if test="searchType == 'tcw'.toString()">
+	 	 and ( title like CONCAT('%', #{keyword}, '%')
+	 	 	  OR
+	 	 	   content like CONCAT('%', #{keyword}, '%')
+	 	 	  OR
+	 	 	   writer like CONCAT('%', #{keyword}, '%')) 
+	 	</if>
+	 </if>
+	</sql>
+	
 	<!-- 검색과 페이징처리 -->
 	<select id="listSearch" resultType="BoardVO">
-	select *
+	 select *
 	 from
 		   tbl_board
 	 where bno &gt; 0
-  order by bno desc, regdate desc
+	 
+	 <include refid="search"></include> <!-- 동일한 SQL 재사용 -->
+	  
+	 order by bno desc
 	 limit #{pageStart}, #{perPageNum}
 	</select>
-	
+
 	<!-- 검색과 페이징처리 -->
-	<select id="listSearchCount" resultType="BoardVO">
+	<select id="listSearchCount" resultType="int">
 	select count(bno)
 	  from tbl_board
 	 where bno &gt; 0
-	</select>
+	 
+	 <include refid="search"></include> <!-- 동일한 SQL 재사용 -->
+	 
+	 </select>
 	
  </mapper>
   

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.springtest.domain.BoardVO;
 import com.springtest.domain.Criteria;
+import com.springtest.domain.SearchCriteria;
 import com.springtest.persistence.BoardDAO;
 
 @Service
@@ -49,6 +50,18 @@ public class BoardServiceImpl implements BoardService {
 	@Override //전체 게시물의 숫자를 계산
 	public int listCountCriteria(Criteria cri) throws Exception {
 		return dao.countPaging(cri);
+	}
+
+	@Override
+	public List<BoardVO> listSearchCriteria(SearchCriteria cri) throws Exception {
+
+		return dao.listSearch(cri);
+	}
+
+	@Override
+	public int listSearchCount(SearchCriteria cri) throws Exception {
+		
+		return dao.listSearchCount(cri);
 	}
 	
 
