@@ -36,7 +36,7 @@ foreign key (bno) references tbl_board (bno);
 
 
 
-//�߰� aop
+# aop
 
 create table tbl_user ( 
  uid varchar(50) NOT NULL, 
@@ -71,24 +71,24 @@ alter table tbl_message add constraint fk_usersender
 foreign key (sender) references tbl_user (uid); 
 
 
-// Ʈ����� �߰�
+#조회수 추가
 
 
 alter table tbl_board add column replycnt int default 0;
 
 
-//
 
+# 파일첨부
 create table tbl_attach (
-  fullName varchar(150) not null,
+  fullName varchar(150) not null, 
   bno int not null,
   regdate timestamp default now(),
-  primary key(fullName)
+  primary key(fullName)#첨부파일의 이름은 업로드시점에 고유하게 처리하기때문에 주키
 );
 
 
 alter table tbl_attach add constraint fk_board_attach 
-foreign key (bno) references tbl_board (bno);
+foreign key (bno) references tbl_board (bno); #모든 첨부파일의 정보는  특정 게시물과 관련이 있음, 외래키
 
 
 

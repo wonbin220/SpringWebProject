@@ -63,18 +63,80 @@ small {
 					console.log(checkImageType(data));
 					
 					if(checkImageType(data)){
-						str ="<div>"
-						+"<a href='displayFile?fileName="+getImageLink(data)+"'>"
+						str ="<div><a href=displayFile?fileName="+getImageLink(data)+">"
 						+"<img src='displayFile?fileName="+data+"'/>"
-							+getImageLink(data)+"</a></div>";
+							+"</a><small data-src="+data+">X</small></div>";
 					}else{
 						str ="<div><a href='displayFile?fileName="+data+"'>"
-						+getOriginalName(data)+"</a></div>";
+						+getOriginalName(data)+"</a>"
+						+"<small data-src="+data+">X</small></div></div>";	
 					}
 					$(".uploadedList").append(str);
 				}
 			}); //processData,contentType 둘다 기본값은 'application/x-www-form-urlencoded' 타입으로 전소
 		});
+		
+		$(".uploadedList").on("click", "small", function(event){
+			
+			var that = $(this);
+			
+			$.ajax({
+				url:"deleteFile",
+				type:"post",
+				data: {fileName:$(this).attr("data-src")},
+				dataType:"text",
+				success:function(result){
+					if(result == 'deleted'){
+						//alert("deleted");
+						that.parent("div").remove(); //이미지나 파일옆의 'x'를 클릭하면 서버에서 'deleted'라는 메시지가 전송됨. 
+													//-> 결과로 현재 첨부파일에 해당되는  <div>를 삭제.
+					}
+				}
+			});
+		});
+/* 		
+$(".fileDrop").on("drop", function(event) {
+	event.preventDefault();
+	
+	var files = event.originalEvent.dataTransfer.files;
+	
+	var file = files[0];
+
+	//console.log(file);
+	var formData = new FormData();
+	
+	formData.append("file", file);
+
+	
+	$.ajax({
+		  url: '/uploadAjax',
+		  data: formData,
+		  dataType:'text',
+		  processData: false,
+		  contentType: false,
+		  type: 'POST',
+		  success: function(data){
+			  
+			  var str ="";
+			  
+			  console.log(data);
+			  console.log(checkImageType(data));
+			  
+			  if(checkImageType(data)){
+				  str ="<div><a href='displayFile?fileName="+getImageLink(data)+"'>"
+						  +"<img src='displayFile?fileName="+data+"'/></a>"
+						  +data +"</div>";
+			  }else{
+				  str = "<div><a href='displayFile?fileName="+data+"'>" 
+						  + getOriginalName(data)+"</a></div>";
+			  }
+			  
+			  $(".uploadedList").append(str);
+		  }
+		});			
+});	 */
+
+
 		
 	function checkImageType(fileName){
 			// 정규표현식을 이용해서 파일의 확장자가 존재하는지를 검사
@@ -105,6 +167,7 @@ small {
 		
 		return front + end;
 	}
+	
 	
 	</script>
 </body>

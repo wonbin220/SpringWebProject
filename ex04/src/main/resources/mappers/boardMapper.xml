@@ -130,6 +130,26 @@
 		update tbl_board set viewcnt = viewcnt + 1 where bno = #{bno}
 		
 	</update>
+	
+	<insert id="addAttach">
+		insert into tbl_attach(fullname, bno) values (#{fullName}, LAST_INSERT_ID())
+	</insert> <!-- 등록작업은 한번에 게시물의 테이블인 tbl_board 테이블에 내용이 추가되는것과 동시에 tbl_attach 테이블에도 게시물 번호를 같이 저장. -->
+			<!-- tbl_board 테이블의 설계는 게시물의 번호인 bno칼럼이 'auto_increment'로 설계되어 게시물의 등록시점에 게시물 번호가 생성된다는 점 -->
+			<!-- 오라클은 sequence를 이용해서 시퀀스명.currval를 이용하면 되지만, Mysql의 auto_increment의 경우 데이터가 등록될때 자동으로 칼럼의 값이 생성되므로 달리 처리해야함-->
+			<!-- LAST_INSERT_ID()를이용 -->
+			<!-- MySQL의 경우는 바로 직전에 생성된 PK를 알아낼 때 LAST_INSERT_ID()를이용 -->
+	
+	<select id="getAttach" resultType="string">
+		select fullname from tbl_attach where bno = #{bno} order by regdate
+	</select>
+	
+	<delete id="deleteAttach">
+		delete from tbl_attach where bno = #{bno} 
+	</delete>
+	
+	<insert id="replaceAttach">
+		insert into tbl_attach(fullname, bno) values (#{fullName}, #{bno})
+	</insert>
  </mapper>
   
   	

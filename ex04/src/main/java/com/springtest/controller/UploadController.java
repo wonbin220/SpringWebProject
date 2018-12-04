@@ -19,6 +19,7 @@ import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -139,4 +140,59 @@ public class UploadController {
 		//리턴타입은 ResponseEntity<byte[]>로 작성 결과는 셀지로 파일의 데이터가 됨. @ResponseBody를 이용해서 byte[] 데이터가 그대로 전송될것을 명시
 		// 정상적으로 작동하면 'displayFile?fileName=/년/월/일/파일명'을 호출해서 확인가능
 	}
+	
+	
+	@ResponseBody			
+	@RequestMapping(value="deleteAllFiles", method=RequestMethod.POST)  //기존의 첨부파일도 삭제
+	public ResponseEntity<String> deleteFile(@RequestParam("files[]") String[] files){ // 화면에서 'x'를 선택해서 첨부파일을 삭제할때, 실제경로의 첨부파일도 삭제.
+														//여러개의 파일이름을 받을수있도록 String[]처리
+		logger.info("delete all file: " + files);
+		
+		
+		if(files == null || files.length ==0 ) {
+			return new ResponseEntity<String>("deleted", HttpStatus.OK); 
+		}
+		
+		for (String fileName : files ) {
+			String formatName = fileName.substring(fileName.lastIndexOf(".")+1);
+
+			MediaType mType = MediaUtils.getMediaType(formatName);
+			
+			if(mType != null ) {
+				
+				String front = fileName.substring(0, 12);
+				String end = fileName.substring(14);
+				
+				new File(uploadPath + (front+end).replace('/', File.separatorChar)).delete();
+		}
+		
+		new File(uploadPath + fileName.replace('/', File.separatorChar)).delete();
+		}
+		return new ResponseEntity<String>("deleted", HttpStatus.OK);
+	}
+
+//	@ResponseBody			
+//	@RequestMapping(value="deleteFile", method=RequestMethod.POST) 
+//	public ResponseEntity<String> deleteFile(String fileName){ // 화면에서 'x'를 선택해서 첨부파일을 삭제할때, 실제경로의 첨부파일도 삭제.
+//		
+//		logger.info("delete file: " + fileName);
+//		
+//		String formatName = fileName.substring(fileName.lastIndexOf(".")+1);
+//		
+//		MediaType mType = MediaUtils.getMediaType(formatName);
+//		
+//		if(mType != null ) {
+//			
+//			String front = fileName.substring(0, 12);
+//			String end = fileName.substring(14);
+//			
+//			new File(uploadPath + (front+end).replace('/', File.separatorChar)).delete();
+//		}
+//		
+//		new File(uploadPath + fileName.replace('/', File.separatorChar)).delete();
+//		
+//		
+//		return new ResponseEntity<String>("deleted", HttpStatus.OK);
+//	}
+	
 }
